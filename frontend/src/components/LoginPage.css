@@ -1,0 +1,114 @@
+/* Curtain animations */
+.curtain {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 20;
+  animation: openCurtain 2s forwards ease-out;
+}
+
+.curtain-left {
+  left: 0;
+  border-right: 3px solid #fff;
+}
+
+.curtain-right {
+  right: 0;
+  border-left: 3px solid #fff;
+}
+
+@keyframes openCurtain {
+  0% {
+    width: 50%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+/* Avatar styles */
+.avatar {
+  position: absolute;
+  bottom: 5%;
+  height: min(80vh, 90%);
+  max-height: 700px;
+  width: auto;
+  z-index: 30;
+  opacity: 0;
+  animation: riseUp 1.5s forwards ease-out 2s, float 3s ease-in-out infinite 3.5s;
+}
+
+
+.avatar-left {
+  left: 2%;
+}
+
+.avatar-right {
+  right: 2%;
+}
+
+
+
+@keyframes riseUp {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Form fade-in */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 2.5s ease-out 2s forwards; /* Form appears after curtain */
+}
+
+/* Floating background text */
+.floating-text {
+  position: absolute;
+  font-size: clamp(1rem, 2vw, 2.5rem);
+  color: rgba(255, 0, 0, 0.15); /* Soft red, very transparent */
+  font-weight: bold;
+  white-space: nowrap;
+  animation: floatText 6s ease-in-out infinite alternate;
+  pointer-events: none; /* Prevent interaction */
+  z-index: 10; /* Behind avatars and form, but above background */
+}
+
+@keyframes floatText {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+}
