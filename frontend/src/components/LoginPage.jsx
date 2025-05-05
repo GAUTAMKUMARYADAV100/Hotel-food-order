@@ -5,6 +5,7 @@ import "./LoginPage.css";
 import IndianMale from "../assets/Indian-male.png";
 import IndianFemale from "../assets/Indian-female.png";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const [name, setName] = useState("");
@@ -26,7 +27,19 @@ const LoginPage = () => {
 
       if (res.status === 200) {
         login(userData); // Save to context and localStorage
-        alert("Login Successful!");
+        toast.success("✅ Login Successful! Welcome back 🙌", {
+          position: "top-center",
+          style: {
+            backgroundColor: "#fff8dc", // Light cream background
+            color: "#006400",           // Dark green text
+            fontWeight: "bold",
+            fontFamily: "serif",
+            borderRadius: "10px",
+            fontSize: "1.1rem"
+          },
+          icon: "🔐"
+        });
+        
         navigate("/dashboard");
       }
     } catch (err) {
