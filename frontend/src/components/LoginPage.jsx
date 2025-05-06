@@ -5,7 +5,7 @@ import "./LoginPage.css";
 import IndianMale from "../assets/Indian-male.png";
 import IndianFemale from "../assets/Indian-female.png";
 import { AuthContext } from "../context/AuthContext";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [room, setRoom] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ const LoginPage = () => {
       return;
     }
 
+    setLoading(true);
     const userData = { name, mobile, room };
 
     try {
@@ -29,6 +31,7 @@ const LoginPage = () => {
 
       if (res.status === 200) {
         login(userData);
+
         toast.success("✅ Login Successful! Welcome back 🙌", {
           position: "top-center",
           style: {
@@ -37,16 +40,19 @@ const LoginPage = () => {
             fontWeight: "bold",
             fontFamily: "serif",
             borderRadius: "10px",
-            fontSize: "1.1rem"
+            fontSize: "1.1rem",
           },
-          icon: "🔐"
+          icon: "🔐",
         });
 
-        navigate("/dashboard");
+        // Slight delay to ensure toast renders before navigating
+        setTimeout(() => navigate("/dashboard"), 500);
       }
     } catch (err) {
       console.error(err);
       alert("Login failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,10 +65,6 @@ const LoginPage = () => {
         <span className="floating-text left-1/4 top-1/2">Diversity</span>
         <span className="floating-text right-1/4 bottom-16">Culture</span>
         <span className="floating-text left-1/2 top-1/3">India</span>
-
-        {/* Curtains */}
-        <div className="curtain curtain-left bg-red-800"></div>
-        <div className="curtain curtain-right bg-red-800"></div>
 
         {/* Avatars */}
         <img src={IndianMale} alt="Indian Male" className="avatar avatar-left" />
@@ -101,8 +103,9 @@ const LoginPage = () => {
           <button
             onClick={handleLogin}
             className="login-button"
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </div>
       </div>
