@@ -38,7 +38,9 @@ const LoginPage = () => {
         localStorage.setItem("justLoggedIn", "true");
 
         // Navigate immediately - toast will remain visible during navigation
-        navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
       }
     } catch (err) {
       console.error("Login error:", err);
