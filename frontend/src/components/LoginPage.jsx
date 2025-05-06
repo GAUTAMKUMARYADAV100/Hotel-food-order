@@ -35,18 +35,7 @@ const LoginPage = () => {
         login(userData);
 
         // Show success toast
-        toast.success("✅ Login Successful! Welcome back 🙌", {
-          position: "top-center",
-          style: {
-            backgroundColor: "#fff8dc",
-            color: "#006400",
-            fontWeight: "bold",
-            fontFamily: "serif",
-            borderRadius: "10px",
-            fontSize: "1.1rem",
-          },
-          icon: "🔐",
-        });
+        localStorage.setItem("justLoggedIn", "true");
 
         // Navigate immediately - toast will remain visible during navigation
         navigate("/dashboard");
