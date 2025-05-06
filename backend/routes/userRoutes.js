@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
 
     // Save user (whether newly created or updated)
     await user.save();
-
+    console.log("login entry hui");
     res.status(200).json({ message: "Login successful", user });
   } catch (err) {
     console.error("Login error:", err);
