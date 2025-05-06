@@ -10,27 +10,34 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    // Find user by mobile
+    // Step 1: Find existing user
     let user = await User.findOne({ mobile });
 
+    // Step 2: If user doesn't exist, create new one
     if (!user) {
-      // Create new user if not found
       user = new User({ name, mobile, room });
     } else {
-      // Update name and room if user already exists
+      // Step 3: If user exists, update their data
       user.name = name;
       user.room = room;
     }
 
-    // Save user (whether newly created or updated)
+    // Step 4: Save the user
     await user.save();
-    console.log("login entry hui");
-    res.status(200).json({ message: "Login successful", user });
+
+    // Step 5: Only after successful save, send the response
+    console.log("✅ Login entry processed successfully");
+    return res.status(200).json({
+      message: "Login successful",
+      user,
+    });
+
   } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("❌ Login error:", err);
+    return res.status(500).json({ message: "Server error during login" });
   }
 });
+
 
 
 router.get('/', async (req, res) => {
