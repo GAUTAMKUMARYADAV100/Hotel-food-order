@@ -8,7 +8,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+
+app.use(cors({
+  origin: "*", // or specify exact domain like: "https://your-frontend.vercel.app"
+  credentials: true
+}));
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.post("/api/place-order", async (req, res) => {

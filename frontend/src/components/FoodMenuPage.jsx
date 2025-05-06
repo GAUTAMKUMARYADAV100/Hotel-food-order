@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 
 // Memoize decorative components
@@ -114,7 +115,7 @@ const FoodMenuPage = () => {
     };
   
     try {
-      const res = await axios.post("http://localhost:5000/api/place-order", orderSummary);
+      const res = await axios.post(`${baseURL}/api/place-order`, orderSummary);
     
       if (res.status === 200) {
         toast.success("🎉🍛 Order placed! Dhanyavaad 🙏🏻 Enjoy your meal!", {

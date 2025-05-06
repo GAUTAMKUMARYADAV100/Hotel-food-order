@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 const MemoizedDiwaliLamp = React.memo(DiwaliLamp);
 const MemoizedRangoliPattern = React.memo(RangoliPattern);
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+
 // Static data moved outside component to prevent recreation on every render
 const announcements = [
   {
@@ -64,7 +66,7 @@ const DashboardPage = () => {
   const fetchUserData = useCallback(async () => {
     try {
       if (user?.mobile) {
-        const res = await axios.get(`http://localhost:5000/api/users?mobile=${user.mobile}`);
+        const res = await axios.get(`${baseURL}/api/users?mobile=${user.mobile}`);
         if (res.status === 200) {
           setUserData(res.data);
         }

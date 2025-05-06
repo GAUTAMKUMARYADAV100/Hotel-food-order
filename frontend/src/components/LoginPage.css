@@ -1,3 +1,67 @@
+/* Base container */
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #fff7cd, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Wrapper with fixed ratio */
+/* Remove fixed aspect ratio and make the wrapper full screen */
+.login-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1920px;
+  max-height: 1080px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+
+.login-form {
+  z-index: 10;
+  background: white;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.15);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: clamp(260px, 90vw, 360px);
+  animation: fade-in 2s ease-out 2s forwards;
+  text-align: center;
+}
+
+
+/* Inputs and Button */
+.input-field {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.login-button {
+  width: 100%;
+  background-color: #b91c1c;
+  color: white;
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.login-button:hover {
+  background-color: #991b1b;
+}
+
 /* Curtain animations */
 .curtain {
   position: absolute;
@@ -31,14 +95,13 @@
 .avatar {
   position: absolute;
   bottom: 5%;
-  height: min(80vh, 90%);
-  max-height: 700px;
+  height: min(50vh, 40%);
+  max-height: 300px;
   width: auto;
   z-index: 30;
   opacity: 0;
   animation: riseUp 1.5s forwards ease-out 2s, float 3s ease-in-out infinite 3.5s;
 }
-
 
 .avatar-left {
   left: 2%;
@@ -48,8 +111,14 @@
   right: 2%;
 }
 
+@media (max-width: 768px) {
+  .avatar {
+    height: 30vh;
+    max-height: 200px;
+  }
+}
 
-
+/* Animations */
 @keyframes riseUp {
   0% {
     transform: translateY(50px);
@@ -73,7 +142,6 @@
   }
 }
 
-/* Form fade-in */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -85,20 +153,16 @@
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 2.5s ease-out 2s forwards; /* Form appears after curtain */
-}
-
-/* Floating background text */
+/* Floating words */
 .floating-text {
   position: absolute;
-  font-size: clamp(1rem, 2vw, 2.5rem);
-  color: rgba(255, 0, 0, 0.15); /* Soft red, very transparent */
+  font-size: clamp(0.75rem, 2vw, 2rem);
+  color: rgba(255, 0, 0, 0.15);
   font-weight: bold;
   white-space: nowrap;
   animation: floatText 6s ease-in-out infinite alternate;
-  pointer-events: none; /* Prevent interaction */
-  z-index: 10; /* Behind avatars and form, but above background */
+  pointer-events: none;
+  z-index: 5;
 }
 
 @keyframes floatText {
