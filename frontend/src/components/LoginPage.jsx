@@ -60,11 +60,12 @@ const LoginPage = () => {
     <div className="login-container">
       <div className="login-wrapper">
         {/* Floating Words */}
-        <span className="floating-text left-4 top-10">Namaste</span>
-        <span className="floating-text right-4 top-24">Unity</span>
-        <span className="floating-text left-1/4 top-1/2">Diversity</span>
-        <span className="floating-text right-1/4 bottom-16">Culture</span>
-        <span className="floating-text left-1/2 top-1/3">India</span>
+        <span className="floating-text left-4 top-10">नमस्ते</span>
+        <span className="floating-text right-4 top-24">एकता</span>
+        <span className="floating-text left-1/4 top-1/2">विविधता</span>
+        <span className="floating-text right-1/4 bottom-16">संस्कृति</span>
+        <span className="floating-text left-1/2 top-1/3">भारत</span>
+
 
         {/* Avatars */}
         <img src={IndianMale} alt="Indian Male" className="avatar avatar-left" />
