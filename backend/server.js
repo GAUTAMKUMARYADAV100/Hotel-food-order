@@ -17,10 +17,10 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.post("/api/place-order", async (req, res) => {
   try {
-    const { name, mobile, cart, total } = req.body;
+    const { name, mobile, room, cart, total } = req.body; // ✅ included room
     console.log("Incoming order summary:", req.body);
 
-    if (!name || !mobile || !Array.isArray(cart) || !total) {
+    if (!name || !mobile || !room || !Array.isArray(cart) || !total) {
       return res.status(400).send("Invalid order data.");
     }
 
@@ -32,6 +32,7 @@ app.post("/api/place-order", async (req, res) => {
 Order from Kamdhenu Bhawan:
 Customer: ${name}
 Mobile: ${mobile}
+Room: ${room}  👈
 
 Items:
 ${orderDetails}
@@ -49,7 +50,6 @@ Total: ₹${total}
 
     console.log("Email message:\n", message);
 
-
     await transporter.sendMail({
       from: "gautamyadav6232@gmail.com",
       to: "gautamyadav6232@gmail.com",
@@ -63,6 +63,7 @@ Total: ₹${total}
     res.status(500).send("Failed to place order.");
   }
 });
+
 
 app.get("/", (req, res) => {
   res.send("Kamdhenu Bhawan Food Ordering Backend is running");
