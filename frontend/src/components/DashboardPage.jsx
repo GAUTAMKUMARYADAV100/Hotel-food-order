@@ -62,28 +62,7 @@ const DashboardPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const justLoggedIn = localStorage.getItem("justLoggedIn");
-
-    if (justLoggedIn) {
-      toast.success("✅ Login Successful! Welcome back 🙌", {
-        position: "top-center",
-        style: {
-          backgroundColor: "#fff8dc",
-          color: "#006400",
-          fontWeight: "bold",
-          fontFamily: "serif",
-          borderRadius: "10px",
-          fontSize: "1.1rem",
-        },
-        icon: "🔐",
-      });
-
-      // Clear flag so it doesn't repeat
-      localStorage.removeItem("justLoggedIn");
-    }
-  }, []);
+  
   
   // Memoized fetch function with error handling
   const fetchUserData = useCallback(async () => {

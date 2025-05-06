@@ -30,18 +30,31 @@ const LoginPage = () => {
     try {
       const res = await axios.post(`${baseURL}/api/users/login`, userData);
 
-      if (res.status === 200) {
-        // Call login function before navigation
-        login(userData);
-
-        // Show success toast
-        localStorage.setItem("justLoggedIn", "true");
-
-        // Navigate immediately - toast will remain visible during navigation
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 100);
+      function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
       }
+      
+      if (res.status === 200) {
+        login(userData);
+        
+        // Show toast immediately before navigation
+        toast.success("✅ Login Successful! Welcome back 🙌", {
+          position: "top-center",
+          style: {
+            backgroundColor: "#fff8dc",
+            color: "#006400",
+            fontWeight: "bold",
+            fontFamily: "serif",
+            borderRadius: "10px",
+            fontSize: "1.1rem",
+          },
+          icon: "🔐",
+          duration: 3000,
+        });
+      
+        navigate("/dashboard");
+      }
+      
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Login failed. Please try again.", {
