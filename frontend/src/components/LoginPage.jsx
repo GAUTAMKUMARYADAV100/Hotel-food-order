@@ -18,6 +18,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    // Validate fields
     if (!name || !mobile || !room) {
       alert("Please fill all fields");
       return;
@@ -30,8 +31,10 @@ const LoginPage = () => {
       const res = await axios.post(`${baseURL}/api/users/login`, userData);
 
       if (res.status === 200) {
+        // Call login function before navigation
         login(userData);
 
+        // Show success toast
         toast.success("✅ Login Successful! Welcome back 🙌", {
           position: "top-center",
           style: {
@@ -45,12 +48,14 @@ const LoginPage = () => {
           icon: "🔐",
         });
 
-        // Slight delay to ensure toast renders before navigating
-        setTimeout(() => navigate("/dashboard"), 500);
+        // Navigate immediately - toast will remain visible during navigation
+        navigate("/dashboard");
       }
     } catch (err) {
-      console.error(err);
-      alert("Login failed. Try again.");
+      console.error("Login error:", err);
+      toast.error("Login failed. Please try again.", {
+        position: "top-center",
+      });
     } finally {
       setLoading(false);
     }
