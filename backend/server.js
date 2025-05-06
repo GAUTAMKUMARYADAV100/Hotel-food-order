@@ -52,7 +52,7 @@ Total: ₹${total}
 
     await transporter.sendMail({
       from: "gautamyadav6232@gmail.com",
-      to: "gautamyadav6232@gmail.com",
+      to: "pande.prakhar007@gmail.com",
       subject: "New Food Order",
       text: message
     });
