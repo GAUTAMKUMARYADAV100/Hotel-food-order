@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const menuRoutes = require('./routes/menuRoutes');
 const nodemailer = require("nodemailer");
 require('dotenv').config();
 
@@ -15,6 +16,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use('/api/users', userRoutes);
+app.use('/api/menu', menuRoutes);
 app.post("/api/place-order", async (req, res) => {
   try {
     const { name, mobile, room, cart, total } = req.body; // ✅ included room
