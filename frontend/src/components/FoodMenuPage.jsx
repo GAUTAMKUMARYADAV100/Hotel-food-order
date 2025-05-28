@@ -435,6 +435,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
+
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 // Memoize decorative components
@@ -482,34 +483,33 @@ const FoodMenuPage = () => {
   }, []);
 
   // Add item to cart
-  const extractPriceFromNote = (priceNote) => {
-    const match = priceNote.match(/Rs\.\s?(\d+)/);
-    return match ? parseInt(match[1]) : 0;
-  };
-
   const addToCart = (item, category) => {
-    const derivedPrice = extractPriceFromNote(category.priceNote);
+    const cartItemId = `${item.name}-${item.price}-${category.category}`; // Unique identifier
 
     setCart(prevCart => {
-      const existingItem = prevCart.find(cartItem => cartItem.id === item._id);
+      const existingItem = prevCart.find(cartItem => cartItem.id === cartItemId);
+
       if (existingItem) {
         return prevCart.map(cartItem =>
-          cartItem.id === item._id
+          cartItem.id === cartItemId
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       } else {
-        return [...prevCart, { 
-          id: item._id,
-          name: item.name,
-          price: derivedPrice,
-          quantity: 1,
-          categoryName: category.category,
-          priceNote: category.priceNote
-        }];
+        return [
+          ...prevCart,
+          {
+            id: cartItemId,
+            name: item.name,
+            price: item.price,
+            quantity: 1,
+            categoryName: category.category
+          }
+        ];
       }
     });
   };
+
 
   // Remove item from cart
   const removeFromCart = (itemId) => {
@@ -527,6 +527,7 @@ const FoodMenuPage = () => {
     });
   };
 
+
   const handlePlaceOrder = async () => {
     const orderSummary = {
       name: user?.name,
@@ -539,7 +540,6 @@ const FoodMenuPage = () => {
     setIsPlacingOrder(true);
   
     try {
-      console.log("Placing order with data:", orderSummary);
       const res = await axios.post(`${baseURL}/api/place-order`, orderSummary);
   
       if (res.status === 200) {
@@ -560,7 +560,7 @@ const FoodMenuPage = () => {
       }
     } catch (error) {
       console.error("Failed to place order:", error);
-      alert("Failed to send order.");
+      toast.error("Failed to place order. Please try again.");
     } finally {
       setIsPlacingOrder(false);
     }
@@ -615,7 +615,7 @@ const FoodMenuPage = () => {
 
       {/* Main content container */}
       <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8 relative z-10">
-        {/* Header - Same as dashboard */}
+        {/* Header */}
         <motion.div 
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -732,34 +732,28 @@ const FoodMenuPage = () => {
 
           {/* Food Items */}
           {menuCategories.length > 0 ? (
-            <>
-              <div className="mb-4">
-                <p className="text-orange-700 font-medium">
-                  {menuCategories.find(cat => cat._id === activeCategory)?.priceNote}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {menuCategories.find(cat => cat._id === activeCategory)?.items.map(item => (
-                  <motion.div
-                    key={item._id}
-                    whileHover={{ y: -5 }}
-                    className="bg-white border border-orange-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-bold text-orange-800">{item.name}</h3>
-                      </div>
-                      <button
-                        onClick={() => addToCart(item, menuCategories.find(cat => cat._id === activeCategory))}
-                        className="bg-orange-100 text-orange-700 hover:bg-orange-200 px-3 py-1 rounded-full text-sm"
-                      >
-                        Add
-                      </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {menuCategories.find(cat => cat._id === activeCategory)?.items.map(item => (
+                <motion.div
+                  key={item._id}
+                  whileHover={{ y: -5 }}
+                  className="bg-white border border-orange-200 rounded-lg p-4 shadow-sm hover:shadow-md transition"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-bold text-orange-800">{item.name}</h3>
+                      <p className="text-orange-600 mt-1">₹{item.price}</p>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-            </>
+                    <button
+                      onClick={() =>addToCart({ name: item.name, price: item.price },{ category: item.categoryName })}
+                      className="bg-orange-100 text-orange-700 hover:bg-orange-200 px-3 py-1 rounded-full text-sm"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           ) : (
             <div className="text-center py-8">
               <p className="text-gray-500">No menu items available</p>
@@ -818,8 +812,8 @@ const FoodMenuPage = () => {
                           <span className="mx-2">{item.quantity}</span>
                           <button
                             onClick={() => addToCart(
-                              { _id: item.id, name: item.name },
-                              { category: item.categoryName, priceNote: item.priceNote }
+                              { _id: item.id, name: item.name, price: item.price },
+                              { category: item.categoryName }
                             )}
                             className="w-6 h-6 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center"
                           >
@@ -827,9 +821,8 @@ const FoodMenuPage = () => {
                           </button>
                         </div>
                       </div>
-                      {item.priceNote && (
-                        <p className="text-xs text-orange-600 mt-1">{item.priceNote}</p>
-                      )}
+                      <p className="text-sm text-orange-600 mt-1">₹{item.price} each</p>
+                      <p className="text-sm font-medium mt-1">Total: ₹{item.price * item.quantity}</p>
                     </div>
                   ))}
                 </div>

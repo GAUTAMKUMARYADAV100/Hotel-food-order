@@ -14,7 +14,21 @@ const baseURL = import.meta.env.VITE_API_BASE_URL;
 const AdminMenuUpload = () => {
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const ADMIN_PASSWORD = 'Kamdhenu@9821'; // 🔐 Set your predefined password here
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (password === ADMIN_PASSWORD) {
+      setIsAuthenticated(true);
+    } else {
+      toast.error('Invalid password. Redirecting...');
+      setTimeout(() => navigate('/'), 2000);
+    }
+  };
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -84,6 +98,30 @@ const AdminMenuUpload = () => {
       </motion.div>
     ));
   };
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-orange-50 to-amber-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h2 className="text-xl font-semibold text-orange-700 mb-4">Admin Access Required</h2>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <input
+              type="password"
+              placeholder="Enter Admin Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full border border-orange-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <button
+              type="submit"
+              className="w-full bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition"
+            >
+              Enter
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 relative overflow-hidden">

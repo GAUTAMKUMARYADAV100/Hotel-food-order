@@ -15,12 +15,10 @@ router.post('/upload-menu', upload.single('menu'), async (req, res) => {
     const data = await pdf(dataBuffer);
 
     const parsedMenu = parseMenuText(data.text);
-
-    // Optional: Clear old menus if needed
     await Menu.deleteMany({});
     const savedMenu = await Menu.insertMany(parsedMenu);
 
-    fs.unlinkSync(req.file.path); // cleanup
+    fs.unlinkSync(req.file.path);
     res.json({ success: true, menu: savedMenu });
   } catch (error) {
     console.error('Error processing menu:', error);
@@ -39,26 +37,28 @@ router.get('/menu', async (req, res) => {
   }
 });
 
-// Helper function to extract structured menu data
 function parseMenuText(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const menu = [];
   let currentCategory = null;
 
-  const categoryRegex = /^(.*?MENU.*?)@?\s?(Rs\..+?)$/i;
-
   for (let line of lines) {
-    const categoryMatch = line.match(categoryRegex);
-    if (categoryMatch) {
+    if (line.startsWith("## CATEGORY:")) {
       if (currentCategory) menu.push(currentCategory);
-
       currentCategory = {
-        category: categoryMatch[1].trim(),
-        priceNote: categoryMatch[2].trim(),
+        category: line.replace("## CATEGORY:", "").trim(),
         items: []
       };
-    } else if (currentCategory && line.startsWith('-')) {
-      currentCategory.items.push({ name: line.slice(1).trim() });
+    } else if (line.startsWith("ITEM:")) {
+      const [_, itemPart] = line.split("ITEM:");
+      const [name, price] = itemPart.split("| PRICE:");
+      if (currentCategory) {
+        currentCategory.items.push({
+          _id: `${name.trim()}-${price.trim()}`,
+          name: name.trim(),
+          price: parseInt(price.replace(/[₹₹]/g, '').trim())
+        });
+      }
     }
   }
 

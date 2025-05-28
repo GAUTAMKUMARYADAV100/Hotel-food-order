@@ -68,6 +68,13 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <div className="login-wrapper">
+        <button
+          onClick={() => navigate('/Kamdhenuadmin')}
+          className="absolute top-4 right-4 bg-red-700 text-white text-xs px-2 py-1 rounded hover:bg-red-800 transition-all"
+          style={{ height: '18px', fontSize: '10px', lineHeight: '10px' }}
+        >
+          Admin
+        </button>
         {/* Floating Words */}
         <span className="floating-text left-4 top-10">नमस्ते</span>
         <span className="floating-text right-4 top-24">एकता</span>
